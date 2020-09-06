@@ -1,0 +1,135 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    font-family: 'aileron', sans-serif; 
+    background-color: #5ce1e6;
+}
+h1{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+}
+h1#white{
+    color: white;
+}
+h1#yellow{
+    color:#ffeda4;
+}
+#navbar{
+    background-color: #5ce1e6;
+    height: 110px;
+}
+
+#button{
+    padding-top:0.65em;
+    position: relative;
+    background-color:#38b6ff ;
+    height: 200px;
+    width: 200px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left:30px;
+    margin-right: 30px;
+    border-radius: 50%;
+    color:white;
+    font-weight: bolder;
+    font-size:2.3em;
+}
+#button-add{
+    padding:0 0 0 0;
+    position: relative;
+    background-color:#ffeda4 ;
+    height: 50px;
+    width: 50px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left:30px;
+    margin-right: 30px;
+    border-radius: 50%;
+    color:#38b6ff;
+    font-weight: bolder;
+    font-size:2.3em;
+}
+#button:hover{
+    background-color:#5ce1e6;
+    color:white;
+    cursor: pointer;
+}
+#button-add:hover{
+    color:white;
+    cursor: pointer;
+}
+
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration:none;
+}
+#button-text{
+    font-size: 0.6em;
+}
+#button-add-text{
+    position: absolute;
+    top:13px;
+    left:50px;
+    font-size: 0.7em;
+}
+#form{
+    width:90%;
+    background-color:#ffeda4;
+    margin:50px auto 0px auto;
+    padding:50px 50px 50px 50px;
+}
+#decoration-image-container{
+    bottom:0;
+    float: right;
+    overflow:hidden;
+    width:300px;
+    height:275px;
+}
+#class-image{
+    margin-top:50px;
+    margin-bottom:50px;
+}
+#nav-button{
+    margin-top:20px;
+}
+.glyphicon{
+    font-size: 1.5em;
+}
+.glyphicon.glyphicon-plus-sign{
+    font-size: 1.4em;
+}
+.content{
+    background-color: #ffeda4;
+    width: 90%;
+}
+#syllabus-item{
+    position: relative;
+    background-color: #38b6ff;
+    margin: 0px auto 20px auto;
+    height: 90px;
+    border-radius: 30px;
+    color: white;
+}
+#syllabus-item-text{
+    position: absolute;
+    font-size: 2em;
+    top:23px;
+    left:40px;
+}
+#delete-button{
+    float: right;
+    border-radius: 50%;
+    margin-top:20px;
+    margin-right: 25px;
+    padding-top:13px;
+    height: 50px;
+    width: 50px;
+    background-color: red;
+}
+#delete-button:hover{
+    background-color: darkred;
+    cursor: pointer;
+}

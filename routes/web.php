@@ -24,7 +24,7 @@ Route::post('/admin/syllabus/addtopic','HomeController@addTopic');
 Route::get('/admin/syllabus/{topic}','HomeController@unitPage');
 Route::post('/admin/syllabus/addunit','HomeController@addUnit');
 Route::get('/admin/syllabus/deleteTopic/{topic}','HomeController@deleteTopic');
-Route::get('/admin/syllabus/{topic}/deleteUnit/{unit}','HomeController@deleteUnit');
+Route::get('/admin/syllabus/deleteUnit/{topic}/{unit}','HomeController@deleteUnit');
 Route::get('/admin/syllabus/{topic}/{unit}','HomeController@stepPhasePage');
 Route::get('/admin/syllabus/{topic}/{unit}/{phase}','HomeController@stepPage');
 Route::post('/admin/syllabus/addstep','HomeController@addStep');

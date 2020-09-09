@@ -34,7 +34,9 @@ class HomeController extends Controller
     public function syllabusPage()
     {
         $data=Syllabus::select('topic')->distinct()->get();
-        return view('syllabus',['data'=>$data]);
+        $units=Syllabus::all();
+        $view=view('syllabus');
+        return $view->with('data',$data)->with('units',$units);
     }
     public function addTopic(Request $request)
     {
@@ -45,8 +47,9 @@ class HomeController extends Controller
     }
     public function unitPage($topic)
     {
-        $data=Syllabus::where('topic',$topic)->get();
-        return view('unit',['data'=>$data]);
+        $arr['data']=Syllabus::where('topic',$topic)->get();
+        echo json_encode($arr);
+        exit;
     }
     public function addUnit(Request $request){
         $newdata= new Syllabus;

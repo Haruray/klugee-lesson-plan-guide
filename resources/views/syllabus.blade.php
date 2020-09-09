@@ -40,22 +40,29 @@
                 </div>
             </nav>
         </header>
-        <h1 id="white" class="text-center">Design ur Syllabus. TOPICS</h1>
         <div class="container">
             <div class="row">
-                <div id="form" class="col-md-push-6">
+            <h1 id="white" class="text-center"></h1>
+                <div id="welcome-card" class="jumbotron text-center">
+                    <p id="welcome-card-text">Write Your Syllabus!</p>
+                    <img id="welcome-card-image" class="visible-lg visible-md" src="{{asset('images/icon_grade_6.png')}}" height='400' width='400'>
+                </div>
+                <div id="form" class="col-md-push-8">
+                    <h1 id="white" class="text-center">Topics and Units</h1><br/>
                     @foreach ($data as $d)
-                    <div id="syllabus-item" class="text-center">
+                    <div id="syllabus-item">
+                        <a onclick="$dc.fetchUnit('{{$d->topic}}')"><span id="syllabus-utility-button" style="transform:rotate(0deg);" class="glyphicon glyphicon-chevron-right arrow-{!!str_replace(' ','-',$d->topic)!!}"></span></a>
                         <a href="/admin/syllabus/{{$d->topic}}/">
-                            <p id="syllabus-item-text">{{$d->topic}}</p>
-                    </a>
-                    <a href="/admin/syllabus/deleteTopic/{{$d->topic}}">
-                        <span id="delete-button" class="glyphicon glyphicon-trash"></span>
-                    </a>
+                            <p id="syllabus-item-text"><strong>{{$d->topic}}</strong></p>
+                        </a>
+                        <a href="/admin/syllabus/deleteTopic/{{$d->topic}}">
+                            <span id="delete-button" class="glyphicon glyphicon-trash"></span>
+                        </a>
                     </div>
+                    <div id="unit-item-{!!str_replace(' ','-',$d->topic)!!}" class="syllabus-unit"></div>
                     @endforeach
                     <button id="button-add" type="button" class="btn" aria-label="Left Align" data-toggle="modal" data-target="#exampleModalCenter">
-                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span id="button-add-text">Add new topic</span>
+                        <span style="color:white"class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span style="color:white" id="button-add-text">Add new topic</span>
                     </button>
                 </div>
             </div>

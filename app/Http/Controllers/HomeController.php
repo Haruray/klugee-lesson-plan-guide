@@ -47,7 +47,7 @@ class HomeController extends Controller
     }
     public function unitPage($topic)
     {
-        $arr['data']=Syllabus::where('topic',$topic)->get();
+        $arr['data']=Syllabus::where('topic',$topic)->distinct()->get();
         echo json_encode($arr);
         exit;
     }
@@ -56,8 +56,17 @@ class HomeController extends Controller
         $newdata->topic=$request->input('topic');
         $newdata->unit=$request->input('unit');
         $newdata->save();
+        return redirect('/admin/syllabus/');
+    }
+    public function addLesson(Request $request){
+        $newdata= new Syllabus;
+        $newdata->topic=$request->input('topic');
+        $newdata->unit=$request->input('unit');
+        $newdata->lesson=$request->input('lesson');
+        $newdata->save();
         $topic=$request->input('topic');
-        return redirect('/admin/syllabus/'.$topic);
+        $unit=$request->input('unit');
+        return redirect('/admin/syllabus/'.$topic.'/'.$unit);
     }
     public function deleteTopic($topic){
         $data=Syllabus::where('topic',$topic);
@@ -70,37 +79,45 @@ class HomeController extends Controller
             ['unit',$unit]
         ]);
         $data->forceDelete();
-        return redirect('/admin/syllabus/'.$topic);
+        return redirect('/admin/syllabus/');
+    }
+    public function deleteLesson($id){
+        $data=Syllabus::where('id',$id)->first();
+        $topic=$data->topic;
+        $unit=$data->unit;
+        $data=Syllabus::where('id',$id);
+        $data->forceDelete();
+        return redirect('/admin/syllabus/'.$topic.'/'.$unit);
     }
     public function stepPhasePage($topic,$unit){
         $data=Syllabus::where([
             ['topic',$topic],
             ['unit',$unit]
-        ])->first();
+        ])->get();
         $phase=['Pre','During','Post'];
         $view=view('stepphase');
         return $view->with('data',$data)->with('phase',$phase);
     }
-    public function stepPage($topic,$unit,$phase){
-        $data=Syllabus::where([
-            ['topic',$topic],
-            ['unit',$unit]
-        ])->first();
-        $id=$data->id;
+    public function stepPage($id,$phase){
+        $data=Syllabus::where('id',$id)->first();
+        $topic=$data->topic;
+        $unit=$data->unit;
+        $lesson=$data->lesson;
         $steps=Syllabus::find($id)->lesson_steps()->where('phase',strtolower($phase))->get();
-        $backupdata=array($topic,$unit,strtolower($phase));
+        $backupdata=array($topic,$unit,$lesson,strtolower($phase));
         $view=view('step');
         return $view->with('data',$steps)->with('backup',$backupdata);
     }
     public function addStep(Request $request){
         $topic=$request->input('topic');
         $unit=$request->input('unit');
+        $lesson=$request->input('lesson');
         $phase=$request->input('phase');
         $newstep = new LessonStep;
-        $newstep->syllabus_id=Syllabus::where([['topic',$topic],['unit',$unit]])->first()->id;
+        $newstep->syllabus_id=Syllabus::where([['topic',$topic],['unit',$unit],['lesson',$lesson]])->first()->id;
         $newstep->phase=$phase;
         $newstep->step=$request->input('step');
         $newstep->save();
-        return redirect('/admin/syllabus/'.$topic.'/'.$unit.'/'.$phase);
+        return redirect('/admin/syllabus/'.$newstep->syllabus_id.'/'.$phase.'/steps');
     }
 }

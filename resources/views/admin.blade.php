@@ -54,7 +54,7 @@
                         </button>
                         
                         <button id="button" type="button" class="btn" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-file" aria-hidden="true"><br/><p id="button-text">Syllabus</p></span>
+                            <span class="glyphicon glyphicon-file" aria-hidden="true"><br/><p id="button-text">Lesson<br/>Plan</p></span>
                         </button>
                         <button id="button" type="button" class="btn" aria-label="Left Align">
                             <span class="glyphicon glyphicon-download-alt" aria-hidden="true"><br/><p id="button-text" style="font-size:0.5em">Download<br/>Syllabus</p></span>

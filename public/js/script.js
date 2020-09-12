@@ -14,11 +14,22 @@
 
     var insertHtml = function (selector, html,isNull) {
         var targetElem = document.querySelector(selector);
+        console.log(html);
         if (!isNull){
             targetElem.className="syllabus-unit";
         }
         $(selector).append(html);
       };
+    var isIn=function (array,data){
+        len=array.length;
+        flag=false;
+        for (var i=0;i<len;i++){
+            if (array[i]==data){
+                flag=true;
+            }
+        }
+        return flag;
+    }
 
     var show_loading = function (selector) {
         var html = "<div class='text-center'>";
@@ -47,34 +58,35 @@
             type:'get',
             dataType:'json',
             success:function(response){
-                topicHtml=topic.replace(" ","-")
+                topicHtml=topic.replace(/ /g,"-");
+                done=[];
                 arrowClass="arrow-"+topicHtml;
+                console.log(arrowClass);
                 htmlArrow=document.getElementsByClassName(arrowClass)[0];
                 if(response['data'] != null){
                     len = response['data'].length;
                   }
                 if (len>0 && htmlArrow.style.transform=='rotate(0deg)'){
                     rotate(htmlArrow,90);
+                    var iteration=0;
                     for (var i=0;i<len;i++){
                         var unit=response['data'][i].unit;
-                        var iteration=0;
-                        console.log(unit==null);
-                        if (unit!=null){
+                        if (unit!=null && !(isIn(done,unit))){
+                            done.push(unit);
                             iteration+=1;
                             var unitHtml=
                             "<a href=\"/admin/syllabus/"+topic+"/"+unit+"/\">"+
-                                "<p id=\"syllabus-item-unit-text\"><strong>"+"Unit "+iteration+": "+"</strong>"+unit+
+                                "<p id=\"syllabus-item-unit-text\"><strong>"+iteration+": "+"</strong>"+unit+
                                     "<a href=\"/admin/syllabus/deleteUnit/"+topic+"/"+unit+"\">"+
-                                        "<span id=\"delete-button\" class=\"glyphicon glyphicon-trash\" style=\"font-size:0.9em;float:right;margin-top:-10px; margin-right:15px; background-color:transparent; color:red;\"></span>"+
+                                        "<span id=\"delete-button-unit\" class=\"glyphicon glyphicon-trash\"></span>"+
                                     "</a>"+
                                 "</p>"+
                             "</a>";
                             selector="#unit-item-"+topicHtml;
                             insertHtml(selector,unitHtml,false);
-
                         }
                     }
-                    htmlAdd="<br/><button id=\"button-add\" type=\"button\" class=\"btn\" aria-label=\"Left Align\" data-toggle=\"modal\" data-target=\"#exampleModalCenter\">"+
+                    htmlAdd="<br/><button id=\"button-add\" type=\"button\" class=\"btn open-AddUnit\" aria-label=\"Left Align\" data-toggle=\"modal\" data-id=\""+topicHtml+"\" data-target=\"#addUnit\">"+
                         "<span class=\"glyphicon glyphicon-plus-sign\" aria-hidden=\"true\"></span><span id=\"button-add-text\">Add new unit</span>"+
                         "</button>";
                     selector="#unit-item-"+topicHtml;
@@ -97,6 +109,38 @@
     }
     dc.fetchUnit=function(topic){
         fetchData(topic);
+    }
+    dc.fetchStepPhase=function(id){
+        arrowClass="arrow-"+id;
+        htmlArrow=document.getElementsByClassName(arrowClass)[0];
+        if (htmlArrow.style.transform=='rotate(0deg)'){
+            rotate(htmlArrow,90);
+            var len=3;
+            for (var i=0;i<len;i++){
+                var phase=['Pre','During','Post']
+                if (phase!=null){
+                    var phaseHtml=
+                    "<a href=\"/admin/syllabus/"+id+"/"+phase[i]+"/steps\">"+
+                        "<p id=\"syllabus-item-unit-text\">"+phase[i]+
+                        "</p>"+
+                    "</a>";
+                    selector="#unit-item-"+id;
+                    insertHtml(selector,phaseHtml,false);
+
+                }
+            }
+        }
+        else{
+            rotate(htmlArrow,0);
+            selector="unit-item-"+id;
+            try{
+                var element=document.getElementById(selector);
+                element.innerHTML="";
+            }
+            catch(e){
+                console.log(e);
+            }
+    }
     }
     // dc.addNewStep = function(){
     //     var lastStep=lastElementLoop(document.getElementsByClassName("step"));

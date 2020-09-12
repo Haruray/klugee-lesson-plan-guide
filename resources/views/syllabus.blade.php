@@ -44,7 +44,7 @@
             <div class="row">
             <h1 id="white" class="text-center"></h1>
                 <div id="welcome-card" class="jumbotron text-center">
-                    <p id="welcome-card-text">Write Your Syllabus!</p>
+                    <p id="welcome-card-text">Write Your Lesson Plan!</p>
                     <img id="welcome-card-image" class="visible-lg visible-md" src="{{asset('images/icon_grade_6.png')}}" height='400' width='400'>
                 </div>
                 <div id="form" class="col-md-push-8">
@@ -61,14 +61,14 @@
                     </div>
                     <div id="unit-item-{!!str_replace(' ','-',$d->topic)!!}" class="syllabus-unit"></div>
                     @endforeach
-                    <button id="button-add" type="button" class="btn" aria-label="Left Align" data-toggle="modal" data-target="#exampleModalCenter">
+                    <button id="button-add" type="button" class="btn" aria-label="Left Align" data-toggle="modal" data-target="#addtopic">
                         <span style="color:white"class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span style="color:white" id="button-add-text">Add new topic</span>
                     </button>
                 </div>
             </div>
         </div>
         <!-- Modal -->
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal fade" id="addtopic" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -93,6 +93,41 @@
                 </div>
             </div>
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="addUnit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/syllabus/addunit" method="post" id="form-unit">
+                    @csrf
+                        <div class="form-group">
+                            <label for="topic">Add New Unit</label>
+                            <input type="text" name="unit" class="form-control" id="unit" placeholder="Type the unit you want to add in this topic">
+                            <input type="hidden" value="" id="topic" name="topic">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" form="form-unit" value="submit" class="btn btn-primary">Submit</button>
+                </div>
+                </div>
+            </div>
+            </div>
     </div>
+    <script>
+    $(document).on("click", ".open-AddUnit", function () {
+     var topicId = $(this).data('id');
+     var topicReplaced=topicId.replace(/-/g," ");
+     $(".modal-body #topic").val( topicReplaced );
+    });
+    </script>
+    
     </body>
     </html>

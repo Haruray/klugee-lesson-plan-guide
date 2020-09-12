@@ -40,17 +40,33 @@
                 </div>
             </nav>
         </header>
-        <h1 id="white" class="text-center">Design ur Syllabus. TOPICS</h1>
         <div class="container">
             <div class="row">
-                <div id="form" class="col-md-push-6">
-                    @foreach ($phase as $p)
-                    <div id="syllabus-item" class="text-center">
-                        <a href="/admin/syllabus/{{$data->topic}}/{{$data->unit}}/{{$p}}">
-                            <p id="syllabus-item-text">{{$p}}</p>
-                    </a>
+            <h1 id="white" class="text-center"></h1>
+                <div id="welcome-card" class="jumbotron text-center">
+                    <p id="welcome-card-text">Write Your Lesson Plan!</p>
+                    <img id="welcome-card-image" class="visible-lg visible-md" src="{{asset('images/icon_grade_6.png')}}" height='400' width='400'>
+                </div>
+                <div id="form" class="col-md-push-8">
+                    <h1 id="white" class="text-center text-bold">{{$data[0]->topic}} : {{$data[0]->unit}}</h1>
+                    <h3 id="white" class="text-center">Lessons</h3><br/>
+                    @foreach ($data as $d)
+                    <div id="syllabus-item">
+                        @if (!(is_null($d->lesson)))
+                        <a onclick="$dc.fetchStepPhase('{{$d->id}}')"><span id="syllabus-utility-button" style="transform:rotate(0deg);" class="glyphicon glyphicon-chevron-right arrow-{!!str_replace(' ','-',$d->id)!!}"></span></a>
+                        <a href="/admin/syllabus/{{$d->topic}}/{{$d->unit}}/{{$d->lesson}}">
+                            <p id="syllabus-item-text"><strong>{{$d->lesson}}</strong></p>
+                        </a>
+                        <a href="/admin/syllabus/deleteLesson/{{$d->id}}">
+                            <span id="delete-button" class="glyphicon glyphicon-trash"></span>
+                        </a>
                     </div>
+                    <div id="unit-item-{!!str_replace(' ','-',$d->id)!!}" class="syllabus-unit"></div>
+                        @endif
                     @endforeach
+                    <button id="button-add" type="button" class="btn" aria-label="Left Align" data-toggle="modal" data-target="#exampleModalCenter">
+                        <span style="color:white"class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span style="color:white" id="button-add-text">Add new lesson</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -65,11 +81,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/admin/syllabus/addtopic" method="post" id="form-topic">
+                    <form action="/admin/syllabus/addlesson" method="post" id="form-topic">
                     @csrf
                         <div class="form-group">
-                            <label for="topic">Add New Topic</label>
-                            <input type="text" name="topic" class="form-control" id="topic" placeholder="Type the topic you want to add">
+                            <label for="topic">Add New Lesson</label>
+                            <input type="text" name="lesson" class="form-control" id="lesson" placeholder="Type the lesson you want to add">
+                            <input type="hidden" value="{{$d->topic}}" name="topic">
+                            <input type="hidden" value="{{$d->unit}}" name="unit">
                         </div>
                     </form>
                 </div>

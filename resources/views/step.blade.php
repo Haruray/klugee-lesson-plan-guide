@@ -40,20 +40,31 @@
                 </div>
             </nav>
         </header>
-        <h1 id="white" class="text-center">Design ur Syllabus. TOPICS</h1>
         <div class="container">
             <div class="row">
-                <div id="form" class="col-md-push-6">
+            <h1 id="white" class="text-center"></h1>
+                <div id="welcome-card" class="jumbotron text-center">
+                    <p id="welcome-card-text">Write Your Lesson Plan!</p>
+                    <img id="welcome-card-image" class="visible-lg visible-md" src="{{asset('images/icon_grade_6.png')}}" height='400' width='400'>
+                </div>
+                <div id="form" class="col-md-push-8">
+                    <h1 id="white" class="text-center text-bold">{{$backup[0]}} : {{$backup[1]}}</h1>
+                    <h3 id="white" class="text-center">{{$backup[2]}} : {{$backup[3]}}</h3><br/>
                     @foreach ($data as $d)
-                    <div id="syllabus-item" class="text-center">
-                        <p id="syllabus-item-text">{{$d->step}}</p>
-                    <a href="/admin/syllabus/deleteTopic/{{$d->topic}}">
-                        <span id="delete-button" class="glyphicon glyphicon-trash"></span>
-                    </a>
+                    <div id="syllabus-item">
+                        @if (!(is_null($d->step)))
+                        <p id="syllabus-item-text"><strong>Step {{$loop->iteration}}</strong></p>
+                        <a href="/admin/syllabus/deleteLesson/{{$d->id}}">
+                            <span id="delete-button" class="glyphicon glyphicon-trash"></span>
+                        </a>
                     </div>
+                    <div id="unit-item" class="syllabus-unit">
+                        <p id="syllabus-item-step-text">{{$d->step}}</p>
+                    </div>
+                        @endif
                     @endforeach
                     <button id="button-add" type="button" class="btn" aria-label="Left Align" data-toggle="modal" data-target="#exampleModalCenter">
-                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span id="button-add-text">Add new topic</span>
+                        <span style="color:white"class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span style="color:white" id="button-add-text">Add new step</span>
                     </button>
                 </div>
             </div>
@@ -69,20 +80,21 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/admin/syllabus/addstep" method="post" id="form-topic">
+                    <form action="/admin/syllabus/addstep" method="post" id="form-step">
                     @csrf
                         <div class="form-group">
-                            <label for="topic">Add New step to this phase</label>
-                            <input type="text" name="step" class="form-control" id="step" placeholder="Type the step you want to add">
-                            <input type="hidden" value="{{$backup[0]}}" name="topic">
-                            <input type="hidden" value="{{$backup[1]}}" name="unit">
-                            <input type="hidden" value="{{$backup[2]}}" name="phase">
+                            <label for="topic">Add New Step</label>
+                            <textarea form="form-step" name="step" class="form-control" id="step" placeholder="Type the step you want to add"></textarea>
+                            <input type="hidden" name="topic" value="{{$backup[0]}}">
+                            <input type="hidden" name="unit" value="{{$backup[1]}}">
+                            <input type="hidden" name="lesson" value="{{$backup[2]}}">
+                            <input type="hidden" name="phase" value="{{$backup[3]}}">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" form="form-topic" value="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" form="form-step" value="submit" class="btn btn-primary">Submit</button>
                 </div>
                 </div>
             </div>

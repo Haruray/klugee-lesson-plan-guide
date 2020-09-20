@@ -205,14 +205,21 @@
                             "</a>";
                     var anotherSelector="#left-corner";
                     if (selection=="topic"){
-                        breadHtml=data;
+                        breadHtml="<div id=\"breadcrumb-text\" class=\"custombreadcrumb-item\">"+data+"</div>";
                     }
                     else{
-                        var breadHtml=" / "+data;
+                        var breads=document.getElementsByClassName("custombreadcrumb-item");
+                        var breadHtml="<div id=\"breadcrumb-text\" class=\"custombreadcrumb-item\" style=\"font-size:30px;color:white\">"+data+"</div>"
+                        if (breads.length>=3){
+                            breads[0].parentNode.removeChild(breads[0]);
+                        }
                     }
-                    var breadElement=document.getElementById("breadcrumb-text");
+                    var breadSelector="#custombreadcrumb";
+                    var headerSelector="#header";
+                    var header=target[0].toUpperCase() + target.slice(1);
+                    insertHtml(breadSelector,breadHtml,false);
                     replaceHtml(anotherSelector,anotherHtml,false);
-                    breadElement.innerHTML+=breadHtml;
+                    replaceHtml(headerSelector,header,false);
                 }
             }
         })

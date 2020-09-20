@@ -58,12 +58,9 @@
                 <span id="left-corner">
                 </span>
                 <div id="custombreadcrumb" class="text-center center-block">
-                    <div id="breadcrumb-class">{{$classdata['class_name']}}</div>
-                    <div id="breadcrumb-text"></div>
+                    <div id="breadcrumb-class" class="custombreadcrumb-item">{{$classdata['class_name']}}</div>
                 </div>
-                <div id="class-image" class="center-block text-center">
-                    <h1 id="white"><strong>What do you want to teach?</strong></h1>
-                </div>
+                <p id="header" style="font-weight:700;color:white;font-size:27px;text-align:center;margin:80px auto 10px auto">What do you want to teach?</p>
                 <div id="content">
                 @foreach ($data as $d)
                 

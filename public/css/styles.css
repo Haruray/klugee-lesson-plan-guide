@@ -24,14 +24,14 @@ h1#yellow{
     padding-top:0.65em;
     position: relative;
     background-color:#ffeda4 ;
-    height: 90px;
+    height: 75px;
     width: 280px;
     margin-top: 30px;
     margin-bottom: 30px;
     border-radius: 20px;
     color:#38b6ff;
     font-weight: bolder;
-    font-size:2.3em;
+    font-size:23px;
 }
 #button:hover{
     background-color:#5ce1e6;
@@ -46,7 +46,7 @@ a:hover{
 }
 #button-text{
     position:absolute;
-    height: 90px;
+    height: 75px;
     width: 280px;
     border-radius: 20px;
     bottom: -10px;
@@ -103,9 +103,9 @@ a:hover{
     font-weight: 600;
 }
 #breadcrumb-text{
-    font-size: 30px;
+    font-size: 40px;
     color: #ffeda4;
-    font-weight: bold;
+    font-weight: bolder;
     margin-top: 10px;
 }
 #breadcrumb-text2{

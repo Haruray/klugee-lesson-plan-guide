@@ -14,17 +14,17 @@
 
     var insertHtml = function (selector, html,isNull) {
         var targetElem = document.querySelector(selector);
-        console.log(html);
-        if (!isNull){
-            targetElem.className="syllabus-unit";
-        }
         $(selector).append(html);
       };
+    var replaceHtml = function (selector, html,isNull) {
+        var targetElem = document.querySelector(selector);
+        targetElem.innerHTML=html;
+      };
     var isIn=function (array,data){
-        len=array.length;
+        length=array.length;
         flag=false;
-        for (var i=0;i<len;i++){
-            if (array[i]==data){
+        for (var j=0;j<length;j++){
+            if (array[j]==data){
                 flag=true;
             }
         }
@@ -32,9 +32,13 @@
     }
 
     var show_loading = function (selector) {
-        var html = "<div class='text-center'>";
-        html += "<img src='images/ajax-loader.gif'></div>";
-        insertHtml(selector, html);
+        // var html = "<div class='text-center'>";
+        // html += "<img src=\"{{asset('images/ajax-loader.gif')}}\"></div>";
+        var img=document.createElement("img");
+        img.src="../images/ajax-loader.gif";
+        var target=document.querySelector(selector);
+        target.innerHTML="";
+        target.append(img);
       };
 
     var rotate=function (object,degree){
@@ -62,6 +66,7 @@
                 done=[];
                 arrowClass="arrow-"+topicHtml;
                 console.log(arrowClass);
+                console.log(response);
                 htmlArrow=document.getElementsByClassName(arrowClass)[0];
                 if(response['data'] != null){
                     len = response['data'].length;
@@ -69,8 +74,11 @@
                 if (len>0 && htmlArrow.style.transform=='rotate(0deg)'){
                     rotate(htmlArrow,90);
                     var iteration=0;
+                    console.log(response['data']);
                     for (var i=0;i<len;i++){
+                        console.log(i);
                         var unit=response['data'][i].unit;
+                        console.log("tes");
                         if (unit!=null && !(isIn(done,unit))){
                             done.push(unit);
                             iteration+=1;
@@ -141,6 +149,73 @@
                 console.log(e);
             }
     }
+    }
+    dc.fetchSelection=function(selection,data,user_id,class_id){
+        $.ajax({
+            url:'/get/'+selection+'/'+data+'/'+class_id,
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                // var selector="#content";
+                // show_loading(selector);
+                if(response['data'] != null){
+                    var dataLength = response['data'].length;
+                  }
+                if (selection=='topic'){
+                    var target='unit';
+                }
+                else if(selection=='unit'){
+                    var target='lesson';
+                }
+                else if(selection=='lesson'){
+                    var target='phase';
+                }
+                else{
+                    var target='step';
+                }
+                var doneList=[];
+                if(dataLength>0){
+                    var element=document.getElementById('content');
+                    element.innerHTML="";
+                    response['data'].forEach(element => {
+                        console.log(element[target]);
+                        if (element[target]!=null && !(isIn(doneList,element[target]))){
+                            doneList.push(element[target]);
+                            if (selection=='lesson'){
+                                html="<div id=\"button\" class=\"text-center center-block\">"+
+                                "<a href=\"/class/"+user_id+"/"+class_id+"/steps/"+element[target]+"\">"+
+                                    "<p id=\"button-text\">"+element[target].toUpperCase()+"<p>"+
+                                "</a>"+
+                                "</div>"
+                            }
+                            else{
+                                html="<div id=\"button\" class=\"text-center center-block\">"+
+                                "<a onclick=\"$dc.fetchSelection('"+target+"','"+element[target]+"','"+user_id+"','"+class_id+"')\">"+
+                                    "<p id=\"button-text\">"+element[target]+"<p>"+
+                                "</a>"+
+                            "</div>"
+                            }
+                            selector="#content";
+                            insertHtml(selector,html,false);
+                            
+                        }
+                    });
+                    var anotherHtml="<a onclick=\"$dc.fetchSelection('"+selection+"','"+data+"','"+user_id+"','"+class_id+"')\">"+
+                                "<span id=\"arrow\" class=\"glyphicon glyphicon-arrow-left\"></span>"+
+                            "</a>";
+                    var anotherSelector="#left-corner";
+                    if (selection=="topic"){
+                        breadHtml=data;
+                    }
+                    else{
+                        var breadHtml=" / "+data;
+                    }
+                    var breadElement=document.getElementById("breadcrumb-text");
+                    replaceHtml(anotherSelector,anotherHtml,false);
+                    breadElement.innerHTML+=breadHtml;
+                }
+            }
+        })
     }
     // dc.addNewStep = function(){
     //     var lastStep=lastElementLoop(document.getElementsByClassName("step"));

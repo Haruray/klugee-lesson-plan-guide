@@ -17,7 +17,6 @@ Route::get('/', 'Controller@index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin','HomeController@adminPage')->name('admin');
 Route::get('/admin/syllabus','HomeController@syllabusPage');
 Route::get('/admin/syllabus/deleteTopic/{topic}','HomeController@deleteTopic');
@@ -26,6 +25,11 @@ Route::get('/admin/syllabus/deleteLesson/{id}','HomeController@deleteLesson');
 Route::get('/admin/syllabus/{topic}','HomeController@unitPage');
 Route::get('/admin/syllabus/{topic}/{unit}','HomeController@stepPhasePage');
 Route::get('/admin/syllabus/{id}/{phase}/steps','HomeController@stepPage');
+
+Route::get('/home', 'TeacherController@index')->name('home');
+Route::get('/addclasspage','TeacherController@addClassPage');
+Route::get('/class/{user_id}/{class_id}','TeacherController@classPage');
+Route::get('/get/{selection}/{data}/{class_id}','TeacherController@getData');
 
 Route::post('/admin/syllabus/addtopic','HomeController@addTopic');
 Route::post('/admin/syllabus/addunit','HomeController@addUnit');

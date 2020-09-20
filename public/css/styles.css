@@ -7,7 +7,7 @@ body{
 }
 h1{
     font-family: 'Montserrat', sans-serif;
-    font-weight: bolder;
+    font-weight: bold;
 }
 h1#white{
     color: white;
@@ -75,4 +75,42 @@ a:hover{
 }
 #nav-button{
     margin-top:20px;
+}
+#arrow{
+    background-color: #5ce1e6;
+    color: #ffeda4;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    font-size: 30px;
+    padding-left: 8px;
+    padding-top: 5px;
+}
+#custombreadcrumb{
+    position: relative;
+}
+#breadcrumb-class{
+    text-align: center;
+    background-color: #5ce1e6;
+    color: white;
+    font-size: 23px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 50px;
+    width: 160px;
+    border-radius: 10px;
+    padding-top: 8px;
+    font-weight: 600;
+}
+#breadcrumb-text{
+    font-size: 30px;
+    color: #ffeda4;
+    font-weight: bold;
+    margin-top: 10px;
+}
+#breadcrumb-text2{
+    font-size: 35px;
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
 }

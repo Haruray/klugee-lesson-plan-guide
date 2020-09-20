@@ -55,26 +55,27 @@
         </header>
         <div class="container">
             <div class="row">
-                <div id="class-image" class="center-block text-center">
-                    <img src="{{asset('images/class.png')}}" width="200" height="200">
+                <span id="left-corner">
+                </span>
+                <div id="custombreadcrumb" class="text-center center-block">
+                    <div id="breadcrumb-class">{{$classdata['class_name']}}</div>
+                    <div id="breadcrumb-text"></div>
                 </div>
+                <div id="class-image" class="center-block text-center">
+                    <h1 id="white"><strong>What do you want to teach?</strong></h1>
+                </div>
+                <div id="content">
                 @foreach ($data as $d)
+                
                     <div id="button" class="text-center center-block">
-                        <a href="/class/{{$d->user_id}}/{{$d->id}}">
-                            <p id="button-text">{{$d->class_name}}<p>
+                        <a onclick="$dc.fetchSelection('topic','{{$d->topic}}','{{$classdata['user_id']}}','{{$classdata['class_id']}}')">
+                            <p id="button-text">{{$d->topic}}<p>
                         </a>
                     </div>
+                
                 @endforeach
-                <div id="button" class="text-center center-block">
-                    <a href="/addclasspage">
-                        <p id="button-text">Add Class<p>
-                    </a>
                 </div>
             </div>
-
         </div>
-        <script id="__bs_script__">//<![CDATA[
-    document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.26.12'><\/script>".replace("HOST", location.hostname));
-//]]></script>
     </body>
 </html>

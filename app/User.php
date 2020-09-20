@@ -36,4 +36,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function klugee_classes(){
+        return $this->hasMany('App\KlugeeClass');
+    }
 }

@@ -181,9 +181,10 @@
                         console.log(element[target]);
                         if (element[target]!=null && !(isIn(doneList,element[target]))){
                             doneList.push(element[target]);
+                            console.log(element);
                             if (selection=='lesson'){
                                 html="<div id=\"button\" class=\"text-center center-block\">"+
-                                "<a href=\"/class/"+user_id+"/"+class_id+"/steps/"+element[target]+"\">"+
+                                "<a href=\"/class/"+user_id+"/"+class_id+"/steps"+"/"+element["id"]+"\">"+
                                     "<p id=\"button-text\">"+element[target].toUpperCase()+"<p>"+
                                 "</a>"+
                                 "</div>"

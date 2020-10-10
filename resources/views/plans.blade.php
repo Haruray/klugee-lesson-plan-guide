@@ -37,7 +37,7 @@
                     <div class="navbar-nav navbar-left">
                         @guest
                         @else
-                        <a class="nav-link" href="{{ route('logout') }}"
+                        <a class="nav-link visible-md visible-lg" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         <button id="nav-button" type="button" class="btn btn-danger" aria-label="Left Align">

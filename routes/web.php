@@ -30,6 +30,10 @@ Route::get('/home', 'TeacherController@index')->name('home');
 Route::get('/addclasspage','TeacherController@addClassPage');
 Route::get('/class/{user_id}/{class_id}','TeacherController@classPage');
 Route::get('/get/{selection}/{data}/{class_id}','TeacherController@getData');
+Route::get('/class/{user_id}/{class_id}/steps/{step_id}','TeacherController@stepPage');
+Route::get('/class/{user_id}/{class_id}/steps/{step_id}/{where}','TeacherController@stepPageNav');
+Route::get('/class/{user_id}/{class_id}/redirect','TeacherController@redirectEnd');
+Route::get('/class/{user_id}/{class_id}/redirect/{syllabus_id}/{where}','TeacherController@redirectPath');
 
 Route::post('/admin/syllabus/addtopic','HomeController@addTopic');
 Route::post('/admin/syllabus/addunit','HomeController@addUnit');

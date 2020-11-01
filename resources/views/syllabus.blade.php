@@ -41,7 +41,6 @@
             </nav>
         </header>
         <div class="container">
-            <div class="row">
             <h1 id="white" class="text-center"></h1>
                 <div id="welcome-card" class="jumbotron text-center">
                     <p id="welcome-card-text">Write Your Lesson Plan!</p>
@@ -66,7 +65,6 @@
                     </button>
                 </div>
             </div>
-        </div>
         <!-- Modal -->
             <div class="modal fade" id="addtopic" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">

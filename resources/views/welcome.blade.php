@@ -28,34 +28,29 @@
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header navbar-right">
-                        <a class="navbar-brand" href="/">
-                            <img id="klugee-logo" src="{{asset('images/klugee-logo.png')}}" alt="tes" width="85" height="85"> 
+                        <a href="/">
+                            <img style="float:right;" id="klugee-logo" src="{{asset('images/klugee-logo.png')}}" alt="tes" width="90" height="90"> 
                         </a>
                     </div>
-                    
                 </div>
             </nav>
         </header>
         <div class="container">
-            <div class="row">
                 <h1 id="yellow" class="text-center">Welcome</h1>
                 <h1 id="white" class="text-center">Teachers!</h1>
-                    <div id="button" class="text-center center-block">
-                        <a href="{{route('login')}}">
-                            <p id="button-text">Sign in<p>
-                        </a>
-                    </div>
+                    <a href="{{route('login')}}">
+                        <div id="button" class="text-center center-block">
+                            Sign in
+                        </div>
+                    </a>
                
-                
-                    <div id="button" class="text-center center-block">
-                        <a href="{{route('register')}}">
-                            <p id="button-text">Sign up</p>
-                        </a>
-                    </div>
+                    <a href="{{route('register')}}">
+                        <div id="button" class="text-center center-block">
+                                Sign up
+                        </div>
+                    </a>
                
             </div>
-
-        </div>
         <script id="__bs_script__">//<![CDATA[
     document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.26.12'><\/script>".replace("HOST", location.hostname));
 //]]></script>

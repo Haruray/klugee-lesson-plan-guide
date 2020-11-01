@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
         <title>Klugee Syllabus</title>
         
@@ -30,30 +30,24 @@
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="nav navbar-nav text-center">
                         <li class="nav-item" role="presentation"><a class="nav-link active" id="logout-button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a><form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-selection" href="/home"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Selection</a></li>
                     </ul>
-                    </div><a class="navbar-brand d-sm-none d-md-block d-none" href="#"><img id="logo-nav" src="{{asset('img/klugee-logo.png')}}"></a></div>
+                </div><a class="navbar-brand d-sm-none d-md-block d-none" href="#"><img id="logo-nav" src="{{asset('img/klugee-logo.png')}}"></a></div>
         </nav>
-        <div class="container">
-                <div id="class-image" class="center-block text-center">
-                    <img src="{{asset('images/class.png')}}" width="200" height="200">
-                </div>
-                <h1 id="white" class="text-center">What class do you want to teach?</h1>
-                @foreach ($data as $d)
-                    <div id="button" class="text-center center-block">
-                        <a href="/class/{{$d->user_id}}/{{$d->id}}">
-                            <p id="button-text">{{$d->class_name}}<p>
-                        </a>
-                    </div>
+        <div>
+            <p id="breadcrumb-class">{{$data1->class_name}}</p>
+        </div>
+        <div class="text-center" id="class-info-block">
+            <div class="container">
+                <h1 class="text-center" id="class-info-block-heading">Class Members</h1>
+                @foreach($data2 as $d)
+                <p class="text-uppercase text-center" id="class-info-block-text">{{$d->name}}</p><a href="/class/{{$data1->user_id}}/{{$data1->id}}/{{$d->id}}/delete"><i id="trash-icon" class="glyphicon glyphicon-trash"></i></a><br/>
                 @endforeach
-                <div id="button" class="text-center center-block">
-                    <a data-toggle="modal" data-target="#addclass">
-                        <p id="button-text"><i class="glyphicon glyphicon-plus"></i> Add Class<p>
-                    </a>
-                </div>
-            </div>
-
-            <!-- MODAL -->
-            <div class="modal fade" id="addclass" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <a class="text-left" id="class-info-block-add" data-toggle="modal" data-target="#addclassmember"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Add</a></div>
+                <a class="text-left" id="class-info-block-delete" href="/class/{{$data1->user_id}}/{{$data1->id}}/delete" ><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete This Class</a></div>
+        </div>
+        <!-- MODAL -->
+        <div class="modal fade" id="addclassmember" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -62,20 +56,24 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/addclass" method="post" id="form-class">
+                    <form action="/addmember" method="post" id="form-classmember">
                     @csrf
                         <div class="form-group">
-                            <label for="class">Add New Class</label>
-                            <input type="text" name="class" class="form-control" id="class" placeholder="Type the class name you want to add">
+                            <label for="class">Add New Member On This Class</label>
+                            <input type="text" name="classmember" class="form-control" id="classmember" placeholder="Type the name you want to add">
+                            <input type="hidden" name="class_id" id="class_id" value="{{$data1->id}}">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" form="form-class" value="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" form="form-classmember" value="submit" class="btn btn-primary">Submit</button>
                 </div>
                 </div>
             </div>
             </div>
+
+        <script src="{{asset('js/jquery.min.js')}}"></script>
+        <script src="{{asset('js/bootstrap.min.js')}}"></script>
     </body>
 </html>

@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\KlugeeClass;
 use App\User;
 use App\Syllabus;
 use App\LessonStep;
+use App\classmember;
+use App\ClassProgress;
 
 class TeacherController extends Controller
 {
@@ -20,9 +23,41 @@ class TeacherController extends Controller
         $data=User::find($id)->klugee_classes()->get();
         return view('home',['data'=>$data]);
     }
-    public function addClassPage(){
-        return view('addclass');
+    public function addClass(Request $request){
+        $newdata=new KlugeeClass;
+        $newdata->class_name=$request->input('class');
+        $newdata->user_id=Auth::id();
+        $newdata->save();
+        $class_id=KlugeeClass::where([['class_name',$request->input('class')],['user_id',Auth::id()]])->first()['id'];
+        $data=classmember::where('klugee_class_id',$class_id);
+        return redirect('/'.'class/'.Auth::id().'/'.$class_id.'/info');
     }
+    public function classInfoPage($user_id,$class_id){
+        $data1=KlugeeClass::where('id',$class_id)->first();
+        $data2=classmember::where('klugee_class_id',$data1['id'])->get();
+        $view=view('classinfo');
+        return $view->with('data1',$data1)->with('data2',$data2);
+    }
+    public function addClassMember(Request $request){
+        $newdata=new classmember;
+        $newdata->klugee_class_id=$request->input('class_id');
+        $newdata->name=$request->input('classmember');
+        $newdata->save();
+        return redirect('/'.'class/'.Auth::id().'/'.$request->input('class_id').'/info');
+    }
+    
+    public function classDelete($user_id,$class_id){
+        $data=KlugeeClass::where([['id',$class_id],['user_id',$user_id]]);
+        $data->forceDelete();
+        return redirect('/home');
+    }
+
+    public function classMemberDelete($user_id,$class_id,$member_id){
+        $data=classmember::where([['klugee_class_id',$class_id],['id',$member_id]]);
+        $data->forceDelete();
+        return redirect('/'.'class/'.$user_id.'/'.$class_id.'/info');
+    }
+
     public function classPage($user_id,$class_id){
         $data=Syllabus::select('topic')->distinct()->get();
         $view=view('plans');
@@ -45,6 +80,40 @@ class TeacherController extends Controller
         echo json_encode($arr);
         exit;
     }
+    public function getDataBack($selection,$data,$class_id){
+        if ($selection=="topic"){
+            $arr['data']=Syllabus::select('topic')->distinct()->get();
+            echo json_encode($arr);
+            exit;
+        }
+        else if ($selection=="unit"){
+            $target="topic";
+            $targetdata=Syllabus::where($selection,$data)->whereNotNull('lesson')->first()['topic'];
+        }
+        else if ($selection=="lesson"){
+            $target="unit";
+            $targetdata=Syllabus::where($selection,$data)->whereNotNull('lesson')->first()['unit'];
+        }
+        $arr['data']=Syllabus::where($target,$targetdata)->whereNotNull('lesson')->distinct()->get();
+        echo json_encode($arr);
+        exit;
+    }
+
+    public function getClassName($class_id){
+        $arr['data']=KlugeeClass::where('id',$class_id)->first();
+        echo json_encode($arr);
+        exit;
+    }
+
+    public function getCompletionData($class_id,$selection,$selection_id=0){
+        $data['progress']=ClassProgress::where('klugee_class_id',$class_id)->get();
+        $data['steps']=LessonStep::get();
+        if ($selection=="unit" || $selection=="lesson"){
+            $data['syllabus']=Syllabus::get();
+        }
+        echo json_encode($data);
+        exit;
+    }
 
     private function countStep($step_id){
         //nyari data yg mau diambil
@@ -60,6 +129,15 @@ class TeacherController extends Controller
         return $return_value+1;
     }
 
+    private function isStepDone($step_id,$class_id){
+        $data=ClassProgress::where([['lesson_step_id',$step_id],['klugee_class_id',$class_id]])->first();
+        if ($data==null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
     public function stepPage($user_id,$class_id,$step_id){
         $data=LessonStep::where('id',$step_id)->first();
         $lesson_id=$data->syllabus_id;
@@ -67,13 +145,22 @@ class TeacherController extends Controller
         $view=view('steppage');
         $stepnumber=self::countStep($step_id);
         $data->get();
-        $classdata=["user_id"=>$user_id,"class_id"=>$class_id,"stepnumber"=>$stepnumber];
+        $isstepdone = self::isStepDone($step_id,$class_id);
+        $classdata=["user_id"=>$user_id,"class_id"=>$class_id,"stepnumber"=>$stepnumber,"isstepdone"=>$isstepdone];
         return $view->with('data',$data)->with('backupdata',$backup)->with('classdata',$classdata);
     }
     public function stepPageNav($user_id,$class_id,$step_id,$where){
         $data=LessonStep::where('id',$step_id)->first();
         $lesson_id=$data->syllabus_id;
         if ($where=='next'){
+            $searchProgress= ClassProgress::where([['lesson_step_id',$step_id],['klugee_class_id',$class_id]])->first();
+            if ($searchProgress==null){
+                $progressData=new ClassProgress;
+                $progressData->klugee_class_id = $class_id;
+                $progressData->lesson_step_id = $step_id;
+                $progressData->progress = 1;
+                $progressData->save();
+            }
             $data=LessonStep::where('id','>',$step_id)->first();
         }
         else if($where=='prev'){ 
@@ -98,7 +185,8 @@ class TeacherController extends Controller
         else{
             $new_step_id=$data->id;
             $stepnumber=self::countStep($new_step_id);
-            $classdata=["user_id"=>$user_id,"class_id"=>$class_id,"stepnumber"=>$stepnumber];
+            $isstepdone = self::isStepDone($new_step_id,$class_id);
+            $classdata=["user_id"=>$user_id,"class_id"=>$class_id,"stepnumber"=>$stepnumber,"isstepdone"=>$isstepdone];
             $backup=Syllabus::where('id',$lesson_id)->get()->first();
             $view=view('steppage');
             $data->get();

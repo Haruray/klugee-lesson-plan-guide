@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
         <title>Klugee Syllabus</title>
         
@@ -25,54 +25,32 @@
         
     </head>
     <body>
-        <header>
-            <nav id="navbar" class="nav navbar-default">
-                <div class="container">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header navbar-right">
-                        <a class="navbar-brand" href="/">
-                            <img id="klugee-logo" src="{{asset('images/klugee-logo.png')}}" alt="tes" width="85" height="85"> 
-                        </a>
-                    </div>
-                    <div class="navbar-nav navbar-left">
-                        @guest
-                        @else
-                        <a class="nav-link visible-md visible-lg" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        <button id="nav-button" type="button" class="btn btn-danger" aria-label="Left Align">
-                                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
-                                        </button>
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                        @endguest
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <div class="container">
-            <div class="row">
-                <span id="left-corner">
-                </span>
-                <div id="custombreadcrumb" class="text-center center-block">
-                    <div id="breadcrumb-class" class="custombreadcrumb-item">{{$classdata['class_name']}}</div>
-                </div>
-                <p id="header" style="font-weight:700;color:white;font-size:27px;text-align:center;margin:80px auto 10px auto">What do you want to teach?</p>
-                <div id="content">
+        <nav id="navbar" class="navbar navbar-light navbar-expand-md">
+            <div class="container"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav text-center">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" id="logout-button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a><form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-info" href="/class/{{$classdata['user_id']}}/{{$classdata['class_id']}}/info"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Info</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-selection" href="/home"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Selection</a></li>
+                    </ul>
+                </div><a class="navbar-brand d-sm-none d-md-block d-none" href="#"><img id="logo-nav" src="{{asset('img/klugee-logo.png')}}"></a></div>
+        </nav>
+        <div class="container"><span id="left-corner"></span>
+            <div id="custombreadcrumb" class="text-center center-block">
+                <div id="breadcrumb-class" class="custombreadcrumb-item">{{$classdata['class_name']}}</div>
+            </div>
+            <p id="header" style="font-weight:700;color:white;font-size:27px;text-align:center;margin:80px auto 10px auto">What do you want to teach?</p>                
+            <div id="content" class="text-center">
                 @foreach ($data as $d)
-                
-                    <div id="button" class="text-center center-block">
-                        <a onclick="$dc.fetchSelection('topic','{{$d->topic}}','{{$classdata['user_id']}}','{{$classdata['class_id']}}')">
-                            <p id="button-text">{{$d->topic}}<p>
-                        </a>
-                    </div>
-                
-                @endforeach
+                <div id="button" class="text-center center-block">
+                    <a onclick="$dc.fetchSelection('topic','{{$d->topic}}','{{$classdata['user_id']}}','{{$classdata['class_id']}}')">
+                        <p id="button-text">{{$d->topic}}</p>
+                    </a>
                 </div>
+                @endforeach
             </div>
         </div>
+        <script src="{{asset('js/jquery.min.js')}}"></script>
+        <script src="{{asset('js/bootstrap.min.js')}}"></script>
     </body>
 </html>

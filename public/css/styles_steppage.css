@@ -54,17 +54,6 @@ body {
   background-color: #38b6ff;
 }
 
-#logout-button {
-  background-color: red;
-  color: #ffeda4;
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  font-size: 30px;
-  padding-left: 14px;
-  float: right;
-  padding-top: 8px;
-}
 
 #arrow{
   background-color: #38b6ff;
@@ -75,6 +64,9 @@ body {
   font-size: 30px;
   padding-left: 8px;
   padding-top: 5px;
+}
+#arrow:hover{
+  background-color: darkcyan;
 }
 
 #back-button-step {
@@ -175,10 +167,6 @@ h2#custom-breadcrumb-text {
   text-align: center;
 }
 
-#logout {
-  color: red;
-  font-size: 20px;
-}
 
 @media (max-width: 767px) {
   #logo {
@@ -191,14 +179,17 @@ h3#custom-breadcrumb-text {
 }
 
 #step-page {
+  background-color: #6B7FFF;
+}
+#step-page-done {
   background-color: #5ce1e6;
 }
 
 #step-text {
   color: white;
   font-weight: 500;
-  font-size: 23px;
-  text-align: justify;
+  font-size: 20px;
+  text-align: left;
   margin: auto;
   width: 80%;
 }
@@ -209,14 +200,11 @@ h3#custom-breadcrumb-text {
     font-weight: 500;
     font-size: 23px;
     text-align: justify;
-    margin: auto 50px auto auto;
+    margin: auto 100px auto auto;
     width: 80%;
   }
 }
 
-#logout-span {
-  text-align: right;
-}
 
 #buttons {
   margin-top: 20px;
@@ -234,7 +222,68 @@ h3#custom-breadcrumb-text {
   border-radius: 50%;
   width: 70px;
   height: 70px;
-  padding-top: 11px;
+  padding-top: 9px;
   margin-top: 30px;
 }
+#check:hover{
+  background-color: aquamarine;
+}
+#navbar{
+  background-color: #6B7FFF;
+  margin-bottom: 30px;
+}
+#navbar-done{
+  background-color: #5ce1e6;
+  margin-bottom: 30px;
+}
+#logo-nav {
+  width: 75px;
+}
 
+#logout-button {
+  color: red;
+  border-radius: 20px;
+  border: solid red 2px;
+  margin-top: 15px;
+  margin-left: 20px;
+}
+
+#logout-button:hover {
+  background-color: red;
+  color: #ffeda4;
+}
+
+#class-info {
+  color: #ffeda4;
+  border: solid 2px #ffeda4;
+  border-radius: 20px;
+  margin-left: 20px;
+  margin-top: 15px;
+}
+
+#class-info:hover {
+  background-color: #38b6ff;
+}
+
+#class-selection {
+  color: white;
+  border: solid 2px white;
+  border-radius: 20px;
+  margin-left: 20px;
+  margin-top: 15px;
+}
+
+#class-selection:hover {
+  background-color: white;
+  color: #5ce1e6;
+}
+#material-selection{
+  color: blue;
+  border: solid 2px blue;
+  border-radius: 20px;
+  margin-left: 20px;
+  margin-top: 15px;
+}
+#material-selection:hover{
+  background-color: #ffeda4;
+}

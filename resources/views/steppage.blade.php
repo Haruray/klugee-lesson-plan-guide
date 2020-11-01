@@ -16,22 +16,33 @@
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <script src="{{asset('js/script.js')}}"></script>
 </head>
-
+@if ($classdata['isstepdone'])
+<body id="step-page-done">
+    <nav id="navbar-done" class="navbar navbar-light navbar-expand-md">
+@else
 <body id="step-page">
-    <nav class="navbar navbar-light navbar-expand-md">
-        <div class="container"><button class="navbar-toggler" data-toggle="collapse"></button></div>
-    </nav>
+    <nav id="navbar" class="navbar navbar-light navbar-expand-md">
+@endif
+            <div class="container"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav text-center">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" id="logout-button" href="#"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="material-selection" href="/class/{{$classdata['user_id']}}/{{$classdata['class_id']}}"><i class="glyphicon glyphicon-home"></i>&nbsp;Material Selection</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-info" href="#"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Info</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-selection" href="/home"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Selection</a></li>
+                    </ul>
+                </div></div>
+        </nav>
     <div class="container">
         <div>
             <div id="buttons-step"><a href="/class/{{$classdata['user_id']}}/{{$classdata['class_id']}}/steps/{{$data->id}}/prev"><span id="arrow" class="glyphicon glyphicon-arrow-left"></span></a></i>
-            <a href="#"><i class="fa fa-sign-out" id="logout-button"></i></a></div>
             <h2 class="pulse animated" id="custom-breadcrumb-text">{{$backupdata->unit}}</h2>
             <h3 class="pulse animated" id="custom-breadcrumb-text">{{$backupdata->lesson}}</h3>
             <p class="flash animated" id="custom-breadcrumbs-steps">{{strtoupper($data->phase)}}</p>
         </div>
         <div id="main-content">
-            <h4 data-aos="fade-right" data-aos-once="true" id="step-title">Step {{$classdata['stepnumber']}}</h4>
-            <p data-aos="fade-right" data-aos-once="true" id="step-text">{{$data->step}}</p>
+            <h4 id="step-title">Step {{$classdata['stepnumber']}}</h4>
+            <p id="step-text">{{$data->step}}</p>
             <a
                 href="/class/{{$classdata['user_id']}}/{{$classdata['class_id']}}/steps/{{$data->id}}/next"><span class=" glyphicon glyphicon-ok " data-bs-hover-animate="tada" id="check"></span></a>
         </div>

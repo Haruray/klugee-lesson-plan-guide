@@ -28,7 +28,7 @@
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="/">
+                        <a style="float:right;" href="/">
                             <img id="klugee-logo" src="{{asset('images/klugee-logo.png')}}" alt="tes" width="90" height="90"> 
                         </a>
                     </div>
@@ -38,14 +38,11 @@
         <h1 id="white" class="text-center">Sign up</h1>
 <div class="container">
     <div class="row justify-content-center">
-        <div id="form" class="col-md-push-8">
-            <div class="card">
-                <div class="card-header"></div>
-
+        <div class="col-md-12">
+            <div id="form" class="card">
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
-
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 

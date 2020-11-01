@@ -32,14 +32,13 @@
     }
 
     var show_loading = function (selector) {
-        // var html = "<div class='text-center'>";
-        // html += "<img src=\"{{asset('images/ajax-loader.gif')}}\"></div>";
-        var img=document.createElement("img");
-        img.src="../images/ajax-loader.gif";
-        var target=document.querySelector(selector);
-        target.innerHTML="";
-        target.append(img);
+        var loadingHTML="<div class=\"loader\"></div>"
+        replaceHtml(selector,loadingHTML,false);
       };
+    var erase_loading = function(selector){
+        var HTML="";
+        replaceHtml(selector,HTML,false);
+    }
 
     var rotate=function (object,degree){
         finalPos='rotate('+degree+'deg)';
@@ -56,6 +55,7 @@
         object.animate([start,end],options);
         object.style.transform = finalPos;
     }
+
     function fetchData(topic){
         $.ajax({
             url:'/admin/syllabus/'+topic,
@@ -150,49 +150,193 @@
             }
     }
     }
+    var getClassName=function(class_id){
+        $.ajax({
+            url:'/getclassname/'+class_id,
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                console.log(response);
+                console.log(response['data']['class_name']);
+                return (response['data']['class_name']);
+            }
+        })
+    }
+
+    var isStepCompleted= function(lesson_step_id,data){
+        var found=false;
+        data['progress'].forEach(element => {
+            if (element['lesson_step_id']==lesson_step_id){
+                found=true;
+            }
+        });
+        return (found);
+    }
+
+    var checkCompletion=function(whatToCheck, itsID, class_id,progressData){
+        console.log("completion check");
+        console.log(progressData);
+        console.log(itsID);
+        if (whatToCheck=="unit"){
+            //check apakah semua lessonnya sudah selesai atau belum
+            //its id adalah id unitnya.
+            //cari id yg ada lessonnya
+            var validID=-999;
+            //karena data syllabus adalah semua data syllabus, kita harus cari data spesifik dari itsID
+            var unitName="";
+            var topicName="";
+            var done=true;
+            progressData['syllabus'].forEach(element=>{
+                if (element['id']==itsID){
+                    unitName=element['unit'];
+                    topicName=element['topic'];
+                }
+            });
+            console.log("DEBUG UY")
+            console.log(topicName);
+            console.log(unitName);
+            progressData['syllabus'].forEach(element=>{
+                if (element['lesson']!=null && element['unit']==unitName && element['topic']==topicName){
+                    validID=element['id'];
+                    console.log(validID);
+                    //sekarang check apakah stepsnya sudah atau belum
+                    progressData['steps'].forEach(elementstep=>{
+                        if (elementstep['syllabus_id']==validID){
+                            console.log("step_id");
+                            console.log(elementstep['id']);
+                            done=done && isStepCompleted(elementstep['id'],progressData);
+                        }
+                    });
+                    console.log("is done?");
+                    console.log(done);
+                    //kalau misal false sekali, berarti isAllDone jadi false;
+                }
+            });
+            if (done){
+                return ("button-done");
+            }
+            else{
+                return ("button-text");
+            }
+        }
+        else if (whatToCheck=="lesson"){
+            //syllabus id nya adalah itsID. Sekarang check apakah tiap step sudah selesai
+            var done=false;
+            progressData['steps'].forEach(element=>{
+                if (element['syllabus_id']==itsID){
+                    done=isStepCompleted(element['id'],progressData);
+                }
+            });
+            
+            if (done){
+                return ("button-done");
+            }
+            else{
+                return ("button-text");
+            }
+        }
+        else if (whatToCheck=="phase"){
+            //ngecek dia phase apa
+            //binary search
+            var phaseNow="";
+            var syllabus_id=0;
+            progressData['steps'].forEach(element => {
+                if (element['id']==itsID){
+                    phaseNow=element['phase'];
+                    syllabus_id=element['syllabus_id'];
+                }
+            });
+            //melihat apakah id step sudah berada di table class_progress
+            var done=false;
+            progressData['steps'].forEach(element=>{
+                if (element['phase']==phaseNow && element['syllabus_id']==syllabus_id){
+                    done=isStepCompleted(element['id'],progressData);
+                }
+            });
+            
+            if (done){
+                return ("button-done");
+            }
+            else{
+                return ("button-text");
+            }
+        }
+        else{//whatToCheck=="step"
+
+        }
+        return "button-text";
+    }
+
     dc.fetchSelection=function(selection,data,user_id,class_id){
+        var selector="#content";
+        show_loading(selector);
         $.ajax({
             url:'/get/'+selection+'/'+data+'/'+class_id,
             type:'get',
             dataType:'json',
             success:function(response){
-                // var selector="#content";
-                // show_loading(selector);
                 if(response['data'] != null){
                     var dataLength = response['data'].length;
                   }
                 if (selection=='topic'){
                     var target='unit';
+                    var progressData=$.parseJSON($.ajax({
+                        url:'/getcompletiondata/'+class_id+'/'+target+'/'+'999',
+                        type:'get',
+                        dataType:'json',
+                        async: false,
+                    }).responseText);
                 }
                 else if(selection=='unit'){
                     var target='lesson';
+                    var progressData=$.parseJSON($.ajax({
+                        url:'/getcompletiondata/'+class_id+'/'+target+'/'+'999',
+                        type:'get',
+                        dataType:'json',
+                        async: false,
+                    }).responseText);
                 }
                 else if(selection=='lesson'){
                     var target='phase';
+                    var progressData=$.parseJSON($.ajax({
+                        url:'/getcompletiondata/'+class_id+'/'+target+'/'+'999',
+                        type:'get',
+                        dataType:'json',
+                        async: false,
+                    }).responseText);
                 }
                 else{
                     var target='step';
+                    var progressData=$.parseJSON($.ajax({
+                        url:'/getcompletiondata/'+class_id+'/'+target+'/'+'999',
+                        type:'get',
+                        dataType:'json',
+                        async: false,
+                    }).responseText);
                 }
+                var idName="button";
                 var doneList=[];
                 if(dataLength>0){
                     var element=document.getElementById('content');
                     element.innerHTML="";
                     response['data'].forEach(element => {
-                        console.log(element[target]);
                         if (element[target]!=null && !(isIn(doneList,element[target]))){
                             doneList.push(element[target]);
                             console.log(element);
                             if (selection=='lesson'){
+                                idName = checkCompletion(target,element["id"],class_id,progressData);
                                 html="<div id=\"button\" class=\"text-center center-block\">"+
                                 "<a href=\"/class/"+user_id+"/"+class_id+"/steps"+"/"+element["id"]+"\">"+
-                                    "<p id=\"button-text\">"+element[target].toUpperCase()+"<p>"+
+                                    "<p id=\""+idName+"\">"+element[target].toUpperCase()+"<p>"+
                                 "</a>"+
                                 "</div>"
                             }
                             else{
+                                //nge ganti idName kalau sudah done;
+                                idName = checkCompletion(target,element["id"],class_id,progressData);
                                 html="<div id=\"button\" class=\"text-center center-block\">"+
                                 "<a onclick=\"$dc.fetchSelection('"+target+"','"+element[target]+"','"+user_id+"','"+class_id+"')\">"+
-                                    "<p id=\"button-text\">"+element[target]+"<p>"+
+                                    "<p id=\""+idName+"\">"+element[target]+"<p>"+
                                 "</a>"+
                             "</div>"
                             }
@@ -201,7 +345,7 @@
                             
                         }
                     });
-                    var anotherHtml="<a onclick=\"$dc.fetchSelection('"+selection+"','"+data+"','"+user_id+"','"+class_id+"')\">"+
+                    var anotherHtml="<a onclick=\"$dc.fetchSelectionBack('"+selection+"','"+data+"','"+user_id+"','"+class_id+"')\">"+
                                 "<span id=\"arrow\" class=\"glyphicon glyphicon-arrow-left\"></span>"+
                             "</a>";
                     var anotherSelector="#left-corner";
@@ -221,6 +365,102 @@
                     insertHtml(breadSelector,breadHtml,false);
                     replaceHtml(anotherSelector,anotherHtml,false);
                     replaceHtml(headerSelector,header,false);
+                }
+            }
+        })
+    }
+
+    dc.fetchSelectionBack=function(selection,data,user_id,class_id){
+        var selector="#content";
+        show_loading(selector);
+        var progressData=$.parseJSON($.ajax({
+            url:'/getcompletiondata/'+class_id+'/'+selection+'/'+'999',
+            type:'get',
+            dataType:'json',
+            async: false,
+        }).responseText);
+        $.ajax({
+            url:'/get/'+selection+'/'+data+'/'+class_id+'/back',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                // var selector="#content";
+                // show_loading(selector);
+                if(response['data'] != null){
+                    var dataLength = response['data'].length;
+                  }
+                var doneList=[];
+                var topic='';
+                var unit='';
+                var lesson='';
+                if(dataLength>0){
+                    var element=document.getElementById('content');
+                    element.innerHTML="";
+                    response['data'].forEach(element => {
+                        if (element[selection]!=null && !(isIn(doneList,element[selection]))){
+                            topic=element['topic'];
+                            unit=element['unit'];
+                            lesson=element['lesson'];
+                            console.log("kontol");
+                            doneList.push(element[selection]);
+                            idName = checkCompletion(selection,element["id"],class_id,progressData);
+                            html="<div id=\"button\" class=\"text-center center-block\">"+
+                            "<a onclick=\"$dc.fetchSelection('"+selection+"','"+element[selection]+"','"+user_id+"','"+class_id+"')\">"+
+                                "<p id=\""+idName+"\">"+element[selection]+"<p>"+
+                            "</a>"+
+                            "</div>";
+                            selector="#content";
+                            insertHtml(selector,html,false);
+                            
+                        }
+                    });
+                    if (selection=="topic"){
+                        var breads=document.getElementsByClassName("custombreadcrumb-item");
+                        breads[breads.length-1].parentNode.removeChild(breads[breads.length-1]);
+                        var headerSelector="#header";
+                        var header="What do you want to teach?";
+                        var anotherHtml="";
+                        var anotherSelector="#left-corner";
+                        var className=$.parseJSON($.ajax({
+                            url:'/getclassname/'+class_id,
+                            type:'get',
+                            dataType:'json',
+                            async: false,
+                        }).responseText);
+                        className=className['data']['class_name'];
+                        console.log(className);
+                        var breadSelector="#custombreadcrumb";
+                        var breadHtml="<div id=\"breadcrumb-class\" class=\"custombreadcrumb-item\">"+className+"</div>";
+                        replaceHtml(breadSelector,breadHtml,false);
+                        replaceHtml(anotherSelector,anotherHtml,false);
+                        replaceHtml(headerSelector,header,false);
+                    }
+                    else{
+                        if (selection=="unit"){
+                            var target="topic";
+                            var anotherHtml="<a onclick=\"$dc.fetchSelectionBack('"+target+"','"+topic+"','"+user_id+"','"+class_id+"')\">"+
+                                "<span id=\"arrow\" class=\"glyphicon glyphicon-arrow-left\"></span>"+
+                            "</a>";
+                            var breadHtml="<div id=\"breadcrumb-text\" class=\"custombreadcrumb-item\" style=\"font-size:30px;color:white\">"+topic+"</div>"
+                        }
+                        else if(selection=="lesson"){
+                            var target="unit";
+                            var anotherHtml="<a onclick=\"$dc.fetchSelectionBack('"+target+"','"+unit+"','"+user_id+"','"+class_id+"')\">"+
+                                "<span id=\"arrow\" class=\"glyphicon glyphicon-arrow-left\"></span>"+
+                            "</a>";
+                            var breadHtml="<div id=\"breadcrumb-text\" class=\"custombreadcrumb-item\" style=\"font-size:30px;color:white\">"+unit+"</div>"
+                        }
+            
+                        var anotherSelector="#left-corner";
+                        var breads=document.getElementsByClassName("custombreadcrumb-item");
+                        breads[breads.length-1].parentNode.removeChild(breads[breads.length-1]);
+                        var breadSelector="#custombreadcrumb";
+                        var headerSelector="#header";
+                        var header=selection[0].toUpperCase() + selection.slice(1);
+                        // insertHtml(breadSelector,breadHtml,false);
+                        replaceHtml(anotherSelector,anotherHtml,false);
+                        replaceHtml(headerSelector,header,false);
+                        }
                 }
             }
         })

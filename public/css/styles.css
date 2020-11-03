@@ -34,6 +34,8 @@ h1#yellow{
     color:#38b6ff;
     font-weight: bolder;
     font-size:21px;
+    text-overflow: ellipsis;
+    overflow: auto;
 }
 
 #button:hover{
@@ -227,51 +229,62 @@ a:hover{
   }
   
   #logout-button {
-    color: red;
+    color: white;
+    background-color: #00c2cb;
+    border: 2px solid #3498db;
+    height: 40px;
+    padding-top: 7px;
     border-radius: 20px;
-    border: solid red 2px;
     margin-top: 15px;
     margin-left: 20px;
   }
   
   #logout-button:hover {
-    background-color: red;
-    color: #ffeda4;
+    background-color: cornflowerblue;
+    color: crimson;
   }
   
   #class-info {
-    color: #ffeda4;
-    border: solid 2px #ffeda4;
+    color: white;
+    background-color: #00c2cb;
+    border: 2px solid #3498db;
+    height: 40px;
+    padding-top: 7px;
     border-radius: 20px;
     margin-left: 20px;
     margin-top: 15px;
   }
   
   #class-info:hover {
-    background-color: #5ce1e6;
+    background-color: cornflowerblue;
   }
   
   #class-selection {
     color: white;
-    border: solid 2px white;
+    background-color: #00c2cb;
+    border: 2px solid #3498db;
+    padding-top: 7px;
+    height: 40px;
     border-radius: 20px;
     margin-left: 20px;
     margin-top: 15px;
   }
   
   #class-selection:hover {
-    background-color: white;
-    color: #5ce1e6;
+    background-color: cornflowerblue;
   }
   #material-selection{
-    color: blue;
-    border: solid 2px blue;
+    color: white;
+    background-color: #00c2cb;
+    border: 2px solid #3498db;
+    padding-top: 7px;
+    height: 40px;
     border-radius: 20px;
     margin-left: 20px;
     margin-top: 15px;
   }
   #material-selection:hover{
-    background-color: #ffeda4;
+    background-color: cornflowerblue;
   }
   #class-info-block {
     background-color: #ffeda4;
@@ -296,36 +309,49 @@ a:hover{
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 50px;
-    border-radius: 30px;
+    border-radius: 20px;
     background-color: #38b6ff;
     font-size: 25px;
     display: inline-block;
   }
   
   #class-info-block-add {
-    font-size: 25px;
+    font-size: 23px;
     color: #38b6ff;
+    margin-bottom: 20px;
   }
   #class-info-block-add:hover{
-    color:blue;
+    color:cornflowerblue;
     cursor: pointer;
   }  
   #class-info-block-delete {
-    font-size: 25px;
-    color: red;
+    font-size: 23px;
+    color: #5ce1e6;
   }
   #class-info-block-delete:hover{
-    color:crimson;
+    color: cornflowerblue;
     cursor: pointer;
   }  
   #trash-icon{
-    font-size: 25px;
+    font-size: 20px;
     margin-left: 10px;
-    color: red;
+    width: 40px;
+    height: 40px;
+    padding-top: 8px;
+    padding-right: 3px;
+    border-radius: 50%;
+    background-color: #5ce1e6;
+    color: white;
   }
   #trash-icon:hover{
+    background-color: cornflowerblue;
     cursor: pointer;
-    color: crimson;
+  }
+
+  #button-grouping-in-class-info{
+    width:250px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .loader {
@@ -360,21 +386,20 @@ a:hover{
 
     #class-info-block-delete {
       font-size: 20px;
-      color: red;
     }
     #trash-icon{
       font-size: 15px;
       margin-left: 10px;
-      color: red;
+      padding-top: 11px;
     }
 }
-@media (max-width:412px) {
+@media (max-width:412px) and (min-width:295px){
   #class-info-block {
     width: 90%;
     margin: 50px auto 50px auto;
   }
   #class-info-block-text {
-    width: 85%;
+    width: 83%;
     height: 50px;
     padding-top: 10px;
     margin-bottom: 50px;
@@ -382,6 +407,10 @@ a:hover{
     font-size: 20px;
   }
   
+  #class-info-block-heading{
+    font-size: 25px;
+  }
+
   #class-info-block-add {
     font-size: 20px;
     color: #38b6ff;
@@ -389,11 +418,48 @@ a:hover{
 
   #class-info-block-delete {
     font-size: 20px;
-    color: red;
   }
   #trash-icon{
-    font-size: 15px;
+    height: 30px;
+    width: 30px;
+    font-size: 12px;
     margin-left: 10px;
-    color: red;
+    padding-top: 8px;
+    padding-left: 1px;
+  }
+}
+@media (max-width:295px) {
+  #class-info-block {
+    width: 90%;
+    margin: 50px auto 50px auto;
+  }
+  #class-info-block-text {
+    width: 80%;
+    height: 40px;
+    padding-top: 7px;
+    margin-bottom: 50px;
+    border-radius: 30px;
+    font-size: 16px;
+  }
+  
+  #class-info-block-heading{
+    font-size: 20px;
+  }
+
+  #class-info-block-add {
+    font-size: 17px;
+    color: #38b6ff;
+  }
+
+  #class-info-block-delete {
+    font-size: 17px;
+  }
+  #trash-icon{
+    height: 25px;
+    width: 25px;
+    font-size: 10px;
+    margin-left: 5px;
+    padding-top: 6px;
+    padding-left: 1px;
   }
 }

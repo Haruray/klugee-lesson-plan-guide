@@ -59,17 +59,30 @@ class TeacherController extends Controller
     }
 
     public function classPage($user_id,$class_id){
-        $data=Syllabus::select('topic')->distinct()->get();
+        $data=Syllabus::select('id','topic')->distinct()->groupBy('id','topic')->get();
+        //taking the unique value
+        //first value as default
+        $newdata = [new \stdClass,new class{},(object)[],];
+        $newdata[0]->id=$data[0]->id;
+        $newdata[0]->topic=$data[0]->topic;
+        $i=0;
+        foreach ($data as $d){
+            if ($d->topic!=$newdata[$i]->topic){
+                $i++;
+                $newdata[$i]->id=$d->id;
+                $newdata[$i]->topic=$d->topic;
+            }
+        }
         $view=view('plans');
         $class=KlugeeClass::where('id',$class_id)->first();
         $classdata=["user_id"=>$user_id,"class_id"=>$class_id,"class_name"=>$class->class_name,];
-        return $view->with('data',$data)->with('classdata',$classdata);
+        return $view->with('data',$newdata)->with('classdata',$classdata);
     }
     public function getData($selection,$data,$class_id){
         if ($selection=="lesson"){
             $data=Syllabus::where($selection,$data)->first();
             $id=$data->id;
-            $arr['data']=Syllabus::find($id)->lesson_steps()->distinct()->get();
+            $arr['data']=LessonStep::where('syllabus_id',$id)->distinct()->get();
         }
         else if ($selection=="phase"){
             //
@@ -79,6 +92,21 @@ class TeacherController extends Controller
         }
         echo json_encode($arr);
         exit;
+    }
+    public function justtesting($selection,$data,$class_id){
+        if ($selection=="lesson"){
+            $data=Syllabus::where($selection,$data)->first();
+            $id=$data->id;
+            $arr['data']=LessonStep::where('syllabus_id',$id)->distinct()->get();
+        }
+        else if ($selection=="phase"){
+            //
+        }
+        else{
+            $arr['data']=Syllabus::where($selection,$data)->distinct()->get();
+        }
+        return $arr['data'];
+        
     }
     public function getDataBack($selection,$data,$class_id){
         if ($selection=="topic"){
@@ -152,6 +180,16 @@ class TeacherController extends Controller
     public function stepPageNav($user_id,$class_id,$step_id,$where){
         $data=LessonStep::where('id',$step_id)->first();
         $lesson_id=$data->syllabus_id;
+        $supportdata=Syllabus::where('id',$lesson_id)->whereNotNull('lesson')->first();
+        $topic=$supportdata->topic;
+        $unit=$supportdata->unit;
+        //main data
+        $data=LessonStep::where('syllabus_id',$lesson_id)->orderByRaw('FIELD(phase,"pre","during","post")')->get();
+        $desiredIndex=$data->search(function($somedata,$key) use($step_id){   
+            if ($somedata->id==$step_id){
+                return $key;
+            };
+        });
         if ($where=='next'){
             $searchProgress= ClassProgress::where([['lesson_step_id',$step_id],['klugee_class_id',$class_id]])->first();
             if ($searchProgress==null){
@@ -161,17 +199,26 @@ class TeacherController extends Controller
                 $progressData->progress = 1;
                 $progressData->save();
             }
-            $data=LessonStep::where('id','>',$step_id)->first();
+            $collect= collect($data)->slice($desiredIndex+1);
+            $data=$collect->first();
         }
         else if($where=='prev'){ 
-            $data=LessonStep::where('id','<',$step_id)->orderByDesc('id')->first();
+            // $data=LessonStep::where('id','<',$step_id)->orderByDesc('id')->first();
+            //jaga-jaga
+            // if ($data==null){
+            //     $syllabus=Syllabus::where([['id','<',$lesson_id],['topic',$data->topic],['unit',$data->unit]])->whereNotNull('lesson')->orderByDesc('id')->first();
+            //     $new_syllabus_id=$syllabus->id;
+            //     $data=LessonStep::where('syllabus_id',$lesson_id)->orderByRaw('FIELD(phase,"pre","during","post")')->first();
+            // }
+            $collect= collect($data)->slice(0,$desiredIndex);
+            $data=$collect->reverse()->first();
         }
         if ($data==null){
             if ($where=='prev'){
-                return redirect('/class'.'/'.$user_id.'/'.$class_id);
+                return redirect('/class'.'/'.$user_id.'/'.$class_id.'/redirect'.'/'.$lesson_id.'/prev');
             }
             else{
-                return redirect('/class'.'/'.$user_id.'/'.$class_id.'/redirect'.'/');
+                return redirect('/class'.'/'.$user_id.'/'.$class_id.'/redirect'.'/'.$lesson_id.'/next');
             }
         }
         else if ($lesson_id!=($data->syllabus_id) || $data->syllabus_id==null){
@@ -194,7 +241,7 @@ class TeacherController extends Controller
         }
     }
 
-    public function redirectEnd($user_id,$class_id){
+    public function redirectEnd($user_id,$class_id,$syllabus_id){
         $data=["user_id"=>$user_id,"class_id"=>$class_id];
         return view('endpage',['data'=>$data]);
     }

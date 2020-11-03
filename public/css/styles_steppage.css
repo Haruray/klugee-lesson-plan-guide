@@ -241,49 +241,60 @@ h3#custom-breadcrumb-text {
 }
 
 #logout-button {
-  color: red;
+  color: white;
+  background-color: #00c2cb;
+  border: 2px solid #3498db;
+  height: 40px;
+  padding-top: 7px;
   border-radius: 20px;
-  border: solid red 2px;
   margin-top: 15px;
   margin-left: 20px;
 }
 
 #logout-button:hover {
-  background-color: red;
-  color: #ffeda4;
+  background-color: cornflowerblue;
+  color: crimson;
 }
 
 #class-info {
-  color: #ffeda4;
-  border: solid 2px #ffeda4;
+  color: white;
+  background-color: #00c2cb;
+  border: 2px solid #3498db;
+  height: 40px;
+  padding-top: 7px;
   border-radius: 20px;
   margin-left: 20px;
   margin-top: 15px;
 }
 
 #class-info:hover {
-  background-color: #38b6ff;
+  background-color: cornflowerblue;
 }
 
 #class-selection {
   color: white;
-  border: solid 2px white;
+  background-color: #00c2cb;
+  border: 2px solid #3498db;
+  padding-top: 7px;
+  height: 40px;
   border-radius: 20px;
   margin-left: 20px;
   margin-top: 15px;
 }
 
 #class-selection:hover {
-  background-color: white;
-  color: #5ce1e6;
+  background-color: cornflowerblue;
 }
 #material-selection{
-  color: blue;
-  border: solid 2px blue;
+  color: white;
+  background-color: #00c2cb;
+  border: 2px solid #3498db;
+  padding-top: 7px;
+  height: 40px;
   border-radius: 20px;
   margin-left: 20px;
   margin-top: 15px;
 }
 #material-selection:hover{
-  background-color: #ffeda4;
+  background-color: cornflowerblue;
 }

@@ -26,9 +26,9 @@
             <div class="container"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="nav navbar-nav text-center">
-                        <li class="nav-item" role="presentation"><a class="nav-link active" id="logout-button" href="#"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link active" id="logout-button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a><form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" id="material-selection" href="/class/{{$classdata['user_id']}}/{{$classdata['class_id']}}"><i class="glyphicon glyphicon-home"></i>&nbsp;Material Selection</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-info" href="#"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Info</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-info" href="/class/{{$classdata['user_id']}}/{{$classdata['class_id']}}/info"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Info</a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" id="class-selection" href="/home"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Selection</a></li>
                     </ul>
                 </div></div>
@@ -42,7 +42,7 @@
         </div>
         <div id="main-content">
             <h4 id="step-title">Step {{$classdata['stepnumber']}}</h4>
-            <p id="step-text">{{$data->step}}</p>
+            <div id="step-text">{!!$data->step!!}</div>
             <a
                 href="/class/{{$classdata['user_id']}}/{{$classdata['class_id']}}/steps/{{$data->id}}/next"><span class=" glyphicon glyphicon-ok " data-bs-hover-animate="tada" id="check"></span></a>
         </div>

@@ -16,15 +16,16 @@
         <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/styles_admin.css') }}">
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
         <script src="{{asset('js/bootstrap.min.js')}}"></script>
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="{{asset('js/script.js')}}"></script>
-
+        <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
     </head>
     <body>
-    <div id="app">
+    <div>
         <header>
             <nav id="navbar" class="nav navbar-default">
                 <div class="container">
@@ -41,25 +42,24 @@
             </nav>
         </header>
         <div class="container">
-            <div class="row">
             <h1 id="white" class="text-center"></h1>
                 <div id="welcome-card" class="jumbotron text-center">
                     <p id="welcome-card-text">Write Your Lesson Plan!</p>
                     <img id="welcome-card-image" class="visible-lg visible-md" src="{{asset('images/icon_grade_6.png')}}" height='400' width='400'>
                 </div>
                 <div id="form" class="col-md-push-8">
-                    <h1 id="white" class="text-center text-bold">{{$backup[0]}} : {{$backup[1]}}</h1>
-                    <h3 id="white" class="text-center">{{$backup[2]}} : {{$backup[3]}}</h3><br/>
+                    <h1 id="white" class="text-center text-bold">{!!$backup[0]!!} : {!!$backup[1]!!}</h1>
+                    <h3 id="white" class="text-center">{!!$backup[2]!!} : {!!$backup[3]!!}</h3><br/>
                     @foreach ($data as $d)
                     <div id="syllabus-item">
                         @if (!(is_null($d->step)))
                         <p id="syllabus-item-text"><strong>Step {{$loop->iteration}}</strong></p>
-                        <a href="/admin/syllabus/deleteLesson/{{$d->id}}">
+                        <a href="/admin/syllabus/deleteStep/{{$d->id}}">
                             <span id="delete-button" class="glyphicon glyphicon-trash"></span>
                         </a>
                     </div>
                     <div id="unit-item" class="syllabus-unit">
-                        <p id="syllabus-item-step-text">{{$d->step}}</p>
+                        <div id="syllabus-item-step-text">{!! $d->step !!}</div>
                     </div>
                         @endif
                     @endforeach
@@ -67,7 +67,6 @@
                         <span style="color:white"class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span style="color:white" id="button-add-text">Add new step</span>
                     </button>
                 </div>
-            </div>
         </div>
         <!-- Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -84,21 +83,51 @@
                     @csrf
                         <div class="form-group">
                             <label for="topic">Add New Step</label>
-                            <textarea form="form-step" name="step" class="form-control" id="step" placeholder="Type the step you want to add"></textarea>
+                            <input name="step" type="hidden">
+                            <!-- <textarea form="form-step" name="step" class="form-control" id="step" placeholder="Type the step you want to add"></textarea> -->
+                            <div id="editor-container">
+                                <p></p>
+                            </div>
                             <input type="hidden" name="topic" value="{{$backup[0]}}">
                             <input type="hidden" name="unit" value="{{$backup[1]}}">
                             <input type="hidden" name="lesson" value="{{$backup[2]}}">
                             <input type="hidden" name="phase" value="{{$backup[3]}}">
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" form="form-step" value="submit" class="btn btn-primary">Submit</button>
                 </div>
                 </div>
             </div>
             </div>
     </div>
+
+    <script>
+        var quill = new Quill('#editor-container', {
+        modules: {
+            toolbar: [
+            ['bold', 'italic'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['link'],
+            ]
+        },
+        theme: 'snow'
+        });
+
+        var form = document.querySelector('#form-step');
+        form.onsubmit = function() {
+        // Populate hidden form on submit
+        var step = document.querySelector('input[name=step]');
+        step.value = quill.root.innerHTML;
+        step.value.unwrap();
+        alert(step.value);
+        //document.querySelector('input[name=step]');.value=JSON.stringify(quill.getContents());
+        console.log("Submitted", $(form).serialize(), $(form).serializeArray());
+        };
+    </script>
+
+
     </body>
     </html>

@@ -42,7 +42,6 @@
         </header>
         <h1 id="white" class="text-center">Design ur Syllabus. TOPICS</h1>
         <div class="container">
-            <div class="row">
                 <div id="form" class="col-md-push-6">
                     @foreach ($data as $d)
                         @if (!(is_null($d->unit)))
@@ -60,7 +59,6 @@
                         <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span id="button-add-text">Add new unit</span>
                     </button>
                 </div>
-            </div>
         </div>
         <!-- Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

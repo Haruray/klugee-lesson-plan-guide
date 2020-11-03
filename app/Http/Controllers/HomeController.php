@@ -52,20 +52,32 @@ class HomeController extends Controller
         exit;
     }
     public function addUnit(Request $request){
-        $newdata= new Syllabus;
-        $newdata->topic=$request->input('topic');
-        $newdata->unit=$request->input('unit');
-        $newdata->save();
+        // $newdata= new Syllabus;
+        // $newdata->topic=$request->input('topic');
+        // $newdata->unit=$request->input('unit');
+        // $newdata->save();
+        $data=Syllabus::where('topic',$request->input('topic'))->first();
+        $data->unit=$request->input('unit');
+        $data->save();
         return redirect('/admin/syllabus/');
     }
     public function addLesson(Request $request){
-        $newdata= new Syllabus;
-        $newdata->topic=$request->input('topic');
-        $newdata->unit=$request->input('unit');
-        $newdata->lesson=$request->input('lesson');
-        $newdata->save();
-        $topic=$request->input('topic');
-        $unit=$request->input('unit');
+        $data=Syllabus::where([['topic',$request->input('topic')],['unit',$request->input('unit')]])->whereNull('lesson')->first();
+        if ($data==null){
+            $newdata= new Syllabus;
+            $newdata->topic=$request->input('topic');
+            $newdata->unit=$request->input('unit');
+            $newdata->lesson=$request->input('lesson');
+            $newdata->save();
+            $topic=$request->input('topic');
+            $unit=$request->input('unit');
+        }
+        else{
+            $data->lesson=$request->input('lesson');
+            $data->save();
+            $topic=$request->input('topic');
+            $unit=$request->input('unit');
+        }
         return redirect('/admin/syllabus/'.$topic.'/'.$unit);
     }
     public function deleteTopic($topic){
@@ -88,6 +100,14 @@ class HomeController extends Controller
         $data=Syllabus::where('id',$id);
         $data->forceDelete();
         return redirect('/admin/syllabus/'.$topic.'/'.$unit);
+    }
+    public function deleteStep($id){
+        $data=LessonStep::where('id',$id)->first();
+        $phase=$data->phase;
+        $syllabus_id=$data->syllabus_id;
+        $data=LessonStep::where('id',$id);
+        $data->forceDelete();
+        return redirect('/admin/syllabus/'.$syllabus_id.'/'.$phase.'/steps');
     }
     public function stepPhasePage($topic,$unit){
         $data=Syllabus::where([

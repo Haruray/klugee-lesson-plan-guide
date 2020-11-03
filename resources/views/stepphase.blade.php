@@ -41,7 +41,6 @@
             </nav>
         </header>
         <div class="container">
-            <div class="row">
             <h1 id="white" class="text-center"></h1>
                 <div id="welcome-card" class="jumbotron text-center">
                     <p id="welcome-card-text">Write Your Lesson Plan!</p>
@@ -68,7 +67,6 @@
                         <span style="color:white"class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span><span style="color:white" id="button-add-text">Add new lesson</span>
                     </button>
                 </div>
-            </div>
         </div>
         <!-- Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

@@ -29,8 +29,8 @@
             <div class="container"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="nav navbar-nav text-center">
-                        <li class="nav-item" role="presentation"><a class="nav-link active" id="logout-button" href="#"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-info" href="#"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Info</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link active" id="logout-button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a><form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="class-info" href="/class/{{$data['user_id']}}/{{$data['class_id']}}/info"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Info</a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" id="class-selection" href="/home"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Class Selection</a></li>
                     </ul>
                 </div></div>

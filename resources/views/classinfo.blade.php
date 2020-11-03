@@ -41,11 +41,13 @@
             <div class="container">
                 <h1 class="text-center" id="class-info-block-heading">Class Members</h1>
                 @foreach($data2 as $d)
-                <p class="text-uppercase text-center" id="class-info-block-text">{{$d->name}}</p><a href="/class/{{$data1->user_id}}/{{$data1->id}}/{{$d->id}}/delete"><i id="trash-icon" class="glyphicon glyphicon-trash"></i></a><br/>
+                <p class="text-uppercase text-center" id="class-info-block-text"><strong>{{$d->name}}</strong></p><a href="/class/{{$data1->user_id}}/{{$data1->id}}/{{$d->id}}/delete"><i id="trash-icon" class="glyphicon glyphicon-trash"></i></a><br/>
                 @endforeach
-                <a class="text-left" id="class-info-block-add" data-toggle="modal" data-target="#addclassmember"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Add</a></div>
-                <a class="text-left" id="class-info-block-delete" href="/class/{{$data1->user_id}}/{{$data1->id}}/delete" ><i class="glyphicon glyphicon-trash"></i>&nbsp;Delete This Class</a></div>
-        </div>
+                <div id="button-grouping-in-class-info" class="text-left">
+                    <div id="class-info-block-add"> <a class="text-left"  data-toggle="modal" data-target="#addclassmember"><i class="glyphicon glyphicon-plus-sign"></i> Add Student</a><br/></div>
+                    <div id="class-info-block-delete"> <a class="text-left" href="/class/{{$data1->user_id}}/{{$data1->id}}/delete" ><i class="glyphicon glyphicon-trash"></i> Delete This Class</a> </div>
+                </div>
+            </div>
         <!-- MODAL -->
         <div class="modal fade" id="addclassmember" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">

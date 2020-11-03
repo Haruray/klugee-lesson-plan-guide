@@ -174,9 +174,6 @@
     }
 
     var checkCompletion=function(whatToCheck, itsID, class_id,progressData){
-        console.log("completion check");
-        console.log(progressData);
-        console.log(itsID);
         if (whatToCheck=="unit"){
             //check apakah semua lessonnya sudah selesai atau belum
             //its id adalah id unitnya.
@@ -192,23 +189,15 @@
                     topicName=element['topic'];
                 }
             });
-            console.log("DEBUG UY")
-            console.log(topicName);
-            console.log(unitName);
             progressData['syllabus'].forEach(element=>{
                 if (element['lesson']!=null && element['unit']==unitName && element['topic']==topicName){
                     validID=element['id'];
-                    console.log(validID);
                     //sekarang check apakah stepsnya sudah atau belum
                     progressData['steps'].forEach(elementstep=>{
                         if (elementstep['syllabus_id']==validID){
-                            console.log("step_id");
-                            console.log(elementstep['id']);
                             done=done && isStepCompleted(elementstep['id'],progressData);
                         }
                     });
-                    console.log("is done?");
-                    console.log(done);
                     //kalau misal false sekali, berarti isAllDone jadi false;
                 }
             });
@@ -222,6 +211,7 @@
         else if (whatToCheck=="lesson"){
             //syllabus id nya adalah itsID. Sekarang check apakah tiap step sudah selesai
             var done=false;
+            console.log(progressData);
             progressData['steps'].forEach(element=>{
                 if (element['syllabus_id']==itsID){
                     done=isStepCompleted(element['id'],progressData);
@@ -275,6 +265,9 @@
             type:'get',
             dataType:'json',
             success:function(response){
+                console.log(response);
+                console.log(selection);
+                console.log(data);
                 if(response['data'] != null){
                     var dataLength = response['data'].length;
                   }
@@ -365,6 +358,15 @@
                     insertHtml(breadSelector,breadHtml,false);
                     replaceHtml(anotherSelector,anotherHtml,false);
                     replaceHtml(headerSelector,header,false);
+                }
+                else{
+                    var element=document.getElementById('content');
+                    element.innerHTML="";
+                    html="<div id=\"button\" class=\"text-center center-block\">"+
+                                    "<p id=\"button-text\">No data to show<p>"+
+                            "</div>";
+                    selector="#content";
+                    insertHtml(selector,html,false);
                 }
             }
         })

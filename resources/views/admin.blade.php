@@ -43,10 +43,9 @@
         <h1 id="white" class="text-center"></h1>
         <div class="container">
             <div class="text-center">
-                <div class="row">
                     <div id="welcome-card" class="jumbotron">
                         <p id="welcome-card-text">Welcome, Admin!</p>
-                        <img id="welcome-card-image" class="visible-lg visible-md" src="{{asset('images/icon_grade_5.png')}}" height='400' width='400'>
+                        <img id="welcome-card-image" class="d-sm-none d-md-block d-none" src="{{asset('images/icon_grade_5.png')}}" height='400' width='400'>
                     </div>
                     <div id="content" class="col-md-push-6">
                         <button id="button" type="button" class="btn" aria-label="Left Align">
@@ -57,10 +56,9 @@
                             <span class="glyphicon glyphicon-file" aria-hidden="true"><br/><p id="button-text">Lesson<br/>Plan</p></span>
                         </button>
                         <button id="button" type="button" class="btn" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"><br/><p id="button-text" style="font-size:0.5em">Download<br/>Syllabus</p></span>
+                            <span class="glyphicon glyphicon-download-alt"><br/><p id="button-text" style="font-size:0.5em">Download LessonPlan</p></span>
                         </button>
                     </div>
-                </div>
             </div>
         </div>
         </div>

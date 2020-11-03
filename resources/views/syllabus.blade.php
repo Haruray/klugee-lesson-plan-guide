@@ -52,7 +52,7 @@
                     <div id="syllabus-item">
                         <a onclick="$dc.fetchUnit('{{$d->topic}}')"><span id="syllabus-utility-button" style="transform:rotate(0deg);" class="glyphicon glyphicon-chevron-right arrow-{!!str_replace(' ','-',$d->topic)!!}"></span></a>
                         <a href="/admin/syllabus/{{$d->topic}}/">
-                            <p id="syllabus-item-text"><strong>{{$d->topic}}</strong></p>
+                            <p id="syllabus-item-text"><strong>{!!$d->topic!!}</strong></p>
                         </a>
                         <a href="/admin/syllabus/deleteTopic/{{$d->topic}}">
                             <span id="delete-button" class="glyphicon glyphicon-trash"></span>
